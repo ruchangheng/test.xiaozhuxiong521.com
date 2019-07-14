@@ -8,8 +8,6 @@
      * @param $_GET
      * */
     class WeChat {
-        // token
-         private const TOKEN = 'xiaozhuxiong';
         // private const SECRET = '2b1f370602c6aaedd1b85ad16fbf227c';
 
         public function __construct()
@@ -24,7 +22,7 @@
         {
             //获得参数 signature nonce token timestamp echostr
             $nonce     = $_GET['nonce'];
-            $token     = self::TOKEN;
+            $token     = 'xiaozhuxiong';
             $timestamp = $_GET['timestamp'];
             $echostr   = $_GET['echostr'];
             $signature = $_GET['signature'];
@@ -39,6 +37,8 @@
                 ob_clean();
                 echo  $echostr;
                 exit;
+            } else {
+                echo '参数错误';
             }
         }
     }
