@@ -24,15 +24,15 @@
         {
             $input = $_GET;
             $sigature = $input['sigature'];
-            $timestamp = $input['timestamp'];
-            $nonce = $input['nonce'];
             $echostr = $input['echostr'];
 
-            $tmpArr = array(self::TOKEN, $timestamp, $nonce);
+            unset($input['sigature'], $input['echostr']);
+
+            $input['token'] = self::TOKEN;
+
             // 字典序排序
-            sort($arr, SORT_STRING);
-            $tmpStr = implode( $tmpArr );
-            $tmpStr = sha1( $tmpStr );
+            $tmpStr = implode($input);
+            $tmpStr = sha1($tmpStr);
 
             if ($tmpStr === $sigature) {
                 return $echostr;
