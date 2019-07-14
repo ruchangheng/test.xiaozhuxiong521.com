@@ -9,12 +9,12 @@
      * */
     class WeChat {
         // token
-        const TOKEN = 'weixin';
-        const SECRET = '2b1f370602c6aaedd1b85ad16fbf227c';
+         private const TOKEN = 'xiaozhuxiong';
+        // private const SECRET = '2b1f370602c6aaedd1b85ad16fbf227c';
 
         public function __construct()
         {
-            echo $this->checkSignature();
+            $this->checkSignature();
         }
 
         /*
@@ -22,22 +22,23 @@
          * */
         private function checkSignature()
         {
-            $input = $_GET;
-            $sigature = $input['sigature'];
-            $echostr = $input['echostr'];
-
-            unset($input['sigature'], $input['echostr']);
-
-            $input['token'] = self::TOKEN;
-
-            // 字典序排序
-            $tmpStr = implode($input);
-            $tmpStr = sha1($tmpStr);
-
-            if ($tmpStr === $sigature) {
-                return $echostr;
-            } else {
-                return '';
+            //获得参数 signature nonce token timestamp echostr
+            $nonce     = $_GET['nonce'];
+            $token     = self::TOKEN;
+            $timestamp = $_GET['timestamp'];
+            $echostr   = $_GET['echostr'];
+            $signature = $_GET['signature'];
+            //形成数组，然后按字典序排序
+            $array = array();
+            $array = array($nonce, $timestamp, $token);
+            sort($array);
+            //拼接成字符串,sha1加密 ，然后与signature进行校验
+            $str = sha1( implode( $array ) );
+            if( $str == $signature && $echostr ){
+                //第一次接入weixin api接口的时候
+                ob_clean();
+                echo  $echostr;
+                exit;
             }
         }
     }
